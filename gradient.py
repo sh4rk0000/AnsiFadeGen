@@ -23,14 +23,17 @@ def ansi_truecolor(r: int, g: int, b: int, ch: str) -> str:
     return f"{ESC}[38;2;{r};{g};{b}m{ch}"
 
 def parse_color(s: str):
-    s = s.lower()
+    s = s.lower().strip()
     if s in PRESETS:
         return PRESETS[s]
     try:
         r, g, b = map(int, s.split(","))
+        for v in (r, g, b):
+            if v < 0 or v > 255:
+                raise ValueError
         return (r, g, b)
     except Exception:
-        raise ValueError(f"Invalid color: {s}")
+        raise ValueError(f"Invalid color: {s} (use a preset name or R,G,B with 0-255)")
 
 def lerp(a: int, b: int, t: float) -> int:
     return int(a + (b - a) * t)
@@ -51,7 +54,7 @@ def generate_gradient_text(lines, color_list, direction="diagonal"):
 
     out_lines = []
     for y, line in enumerate(lines):
-        # keep trailing spaces (don’t rstrip), but drop only the newline
+        # keep trailing spaces (do not rstrip), but drop only the newline
         line_no_nl = line[:-1] if line.endswith("\n") else line
         buf = []
         for x, ch in enumerate(line_no_nl):
