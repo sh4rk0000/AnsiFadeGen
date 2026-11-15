@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ansifadegen"
+version = "1.0.0"
+description = "Apply multi-stop colour gradients to text and ASCII art, as ANSI, HTML, SVG or PNG."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+dependencies = []
+keywords = ["ansi", "gradient", "ascii-art", "terminal", "truecolor"]
+
+[project.optional-dependencies]
+gui = ["customtkinter>=5.2"]
+png = ["pillow>=9"]
+all = ["customtkinter>=5.2", "pillow>=9"]
+dev = ["pytest", "ruff", "pillow>=9", "customtkinter>=5.2"]
+
+[project.scripts]
+ansifadegen = "ansifadegen.cli:main"
+
+[project.gui-scripts]
+ansifadegen-gui = "ansifadegen.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B"]
